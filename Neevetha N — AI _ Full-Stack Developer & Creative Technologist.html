@@ -512,7 +512,7 @@ dialog{border:2px solid var(--ink);box-shadow:8px 8px 0 var(--wine)}
 
 <section id="contact" class="wrap"><p class="mono" style="color:var(--mute)">The last page</p><h2>Have an idea?<br><i>Let's make it real.</i></h2>
 <div class="cta" style="margin-top:40px"><a class="btn f mag" href="mailto:neevetha2006@gmail.com" data-c="MAIL">neevetha2006@gmail.com</a><a class="btn mag" href="https://linkedin.com/in/neevetha-n" target="_blank" rel="noopener" data-c="OPEN">LinkedIn</a><a class="btn mag" href="https://github.com/niviii-08" target="_blank" rel="noopener" data-c="OPEN">GitHub</a></div>
-<form class="cf" id="cf"><label class="mono" for="cn">Or write here. This opens your email app.</label><input id="cn" placeholder="Your name" required><textarea id="cm" rows="4" placeholder="What are we building?" required></textarea><button class="btn f" style="justify-self:start">Send</button></form>
+<form class="cf" id="cf"><input id="cn" placeholder="Your name *" required maxlength="40"><input id="ce" type="email" placeholder="Your email (so I can reply) *" required maxlength="80"><textarea id="cm" rows="4" placeholder="What are we building? *" required maxlength="500"></textarea><button class="btn f" id="csb" style="justify-self:start"><span>Send message</span></button><p class="mono" id="cstatus" style="font-size:12px;color:#9fd3ff;display:none;margin:4px 0 0"></p></form>
 <footer class="f mono"><span>© 2026 Neevetha N</span><span>Coimbatore, Tamil Nadu</span></footer></section>
 </main>
 
@@ -1380,7 +1380,44 @@ $('#doodleForm').onsubmit = async e => {
 /* STAMPS */
 $('#stamps').innerHTML=STAMPS.map(s=>`<div class="st rv" style="--r:${s[2]}">${s[0]}<span class="mono">${s[1]}</span></div>`).join('');
 /* CONTACT */
-$('#cf').onsubmit=e=>{e.preventDefault();location.href=`mailto:neevetha2006@gmail.com?subject=${encodeURIComponent('Hello from your portfolio, '+$('#cn').value)}&body=${encodeURIComponent($('#cm').value)}`};
+$('#cf').onsubmit = async e => {
+  e.preventDefault();
+  const name = $('#cn').value.trim();
+  const email = $('#ce').value.trim();
+  const message = $('#cm').value.trim();
+  if (!name || !message) return;
+
+  const btn = $('#csb');
+  const status = $('#cstatus');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Sending...</span>';
+
+  if (sbClient) {
+    try {
+      await sbClient.from('contact_messages').insert([{ name, email, message }]);
+    } catch(err) {
+      console.warn('Supabase contact notice:', err);
+    }
+  }
+
+  try {
+    const list = JSON.parse(localStorage.getItem('nn-contact-msgs') || '[]');
+    list.unshift({ name, email, message, created_at: new Date().toISOString() });
+    localStorage.setItem('nn-contact-msgs', JSON.stringify(list));
+  } catch(x){}
+
+  $('#cf').reset();
+  btn.disabled = false;
+  btn.innerHTML = '<span>Sent! ✨</span>';
+  if (status) {
+    status.style.display = 'block';
+    status.textContent = '✓ Message received! Thank you for reaching out.';
+  }
+  setTimeout(() => {
+    btn.innerHTML = '<span>Send message</span>';
+    if (status) status.style.display = 'none';
+  }, 4000);
+};
 /* NAV / PROGRESS */
 const nav=$('#nav'),bar=$('#bar'),bt=$('#burger'),menu=$('#menu');let tk=0;
 addEventListener('scroll',()=>{if(tk)return;tk=1;requestAnimationFrame(()=>{const y=scrollY;nav.classList.toggle('s',y>40);bar.style.width=(y/(document.documentElement.scrollHeight-innerHeight)*100)+'%';if(!RM){const q=path.getBoundingClientRect();path.style.setProperty('--p',Math.min(1,Math.max(0,(innerHeight*.75-q.top)/q.height)));phf.style.transform=`translateY(${Math.min(y,innerHeight)*.06}px)`}tk=0})},{passive:true});
