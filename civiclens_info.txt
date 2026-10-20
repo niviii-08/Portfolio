@@ -1,0 +1,184 @@
+=== CivicLens_TN_Abstract_Submission.docx ===
+
+CivicLens TN - Project Abstract Submission
+1. Overview of Modules and ML Algorithms
+Module
+Core Function
+ML Algorithms & Techniques
+Budget & Scheme Analyzer
+Tracks department/scheme allocation over time; clusters related schemes; surfaces spending trends.
+Unsupervised Learning (K-Means, DBSCAN, Topic Modeling, PCA)
+Political Promise & Feasibility Analyzer
+Extracts claim structure, matches against historical promises, estimates cost, compares against budget.
+Supervised Learning (Logistic Regression, Random Forest, XGBoost, SVM); Deep Learning / NLP (IndicBERT, Sentence-BERT)
+Tamil News Framing Analyzer
+Compares sentiment, word choice, and emphasis across outlets covering the same event.
+Deep Learning / NLP (IndicBERT, Sentence-BERT); Unsupervised Learning (Topic Modeling)
+Representative Performance Dashboard
+Computes a configurable, weighted performance score from attendance, questions, debates, bills.
+Data Aggregation & Statistical Scoring
+Political Funding Transparency
+Visualizes party/donor funding and flags statistically unusual donation patterns.
+Anomaly Detection (Isolation Forest)
+Claim Verification Engine
+Links a political claim to budget evidence and historical data for an evidence-based assessment.
+Deep Learning / NLP (IndicBERT, Sentence-BERT)
+
+2. Objectives
+Collect and structure Tamil Nadu department- and scheme-wise budget data across multiple years.
+Cluster and track schemes over time using NLP and unsupervised learning to surface spending trends.
+Extract structured claims (target group, benefit, amount, time period, sector) from political statements using NLP.
+Compare new promises and claims against historical schemes and actual budget data to generate a feasibility/evidence assessment.
+Analyze Tamil news articles covering the same event to measure sentiment, framing, and emphasis across sources.
+Build a configurable, weighted performance score for MLAs/MPs from attendance, questions, debates, bills, and constituency indicators.
+Apply anomaly detection to publicly available political-funding data to flag statistically unusual donation patterns.
+Present all outputs through a unified citizen dashboard with explainable, evidence-linked results.
+3. ML/DL Methods and Algorithms
+Supervised Learning: Logistic Regression, Random Forest, XGBoost, SVM (used for claim/promise implementation-status classification).
+Unsupervised Learning: K-Means, DBSCAN, Topic Modeling, PCA (used for scheme clustering and news-topic/framing discovery).
+Deep Learning / NLP: IndicBERT / multilingual BERT, Sentence-BERT embeddings (used for Tamil sentiment analysis, semantic similarity for promise matching, claim/entity extraction).
+Anomaly Detection: Isolation Forest (used for flagging statistically unusual political-donation patterns).
+Reinforcement Learning: Multi-Armed Bandit / Q-Learning (optional module for personalizing surfaced civic information).
+4. Corresponding Datasets
+The project prioritizes real, publicly available data. Where domain-specific labeled data is not publicly available, a smaller annotated subset will be manually created for model training.
+Tamil Nadu Budget Portal (Public): Department-wise demands, scheme-level allocations, and expenditure by year.
+PRS Legislative Research (Public): MLA/MP attendance, questions asked, debate participation, and bill activity.
+ADR / MyNeta (Public): Candidate financial disclosures and political-party donation/funding data.
+Tamil News Archives (Public/Scraped): Articles from multiple Tamil-language outlets covering the same political events for framing/sentiment comparison.
+Political Manifestos & Past Scheme Documents (Public): Used to match new promises against historical precedents.
+5. References
+[1] Government of Tamil Nadu. (n.d.). Tamil Nadu State Budget Portal. Retrieved from https://www.tn.gov.in/
+[2] PRS Legislative Research. (n.d.). State Legislative Data - Tamil Nadu. Retrieved from https://prsindia.org/
+[3] Association for Democratic Reforms (ADR). (n.d.). MyNeta Database. Retrieved from https://myneta.info/
+[4] Devlin, J. et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. arXiv:1810.04805.
+[5] Kakwani, D. et al. (2020). IndicNLPSuite: Monolingual Corpora, Evaluation Benchmarks and Pre-trained Multilingual Language Models for Indian Languages. Findings of EMNLP.
+[6] Pedregosa, F. et al. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825-2830.
+
+=== CivicLens_TN_Project_Abstract.docx ===
+
+CivicLens TN
+An AI-Powered Public Accountability and Policy Intelligence Platform for Tamil Nadu
+Initial Project Discussion — Faculty Review
+1. Project Abstract
+CivicLens TN is an AI-powered public accountability platform designed to help citizens understand government budgets, scheme implementation, political claims, media framing, and elected-representative performance. Rather than functioning as a single-purpose "fake political promise detector," the system is built as an integrated civic-intelligence platform that links five connected modules — budget analysis, political promise/claim verification, Tamil news framing analysis, political funding transparency, and representative performance scoring — around a common citizen dashboard.
+The platform combines supervised learning, unsupervised learning, deep learning (Tamil/multilingual NLP), and anomaly detection to analyze historical and current Tamil Nadu government data, political statements, Tamil-language news articles, and publicly available political-finance and legislative-activity data. Rather than declaring political claims, individuals, or news sources as "true," "false," or "biased," the platform produces evidence-based comparisons, statistical indicators, and explainable assessments, enabling citizens to make better-informed decisions. The core demonstrator feature allows a user to submit a political claim (e.g., "Education spending increased by 25%") and receive an automatically generated, evidence-backed assessment drawn directly from budget records and historical scheme data.
+2. Problem Statement
+Citizens in Tamil Nadu have limited practical access to structured, comparable information about how government budgets are allocated and spent, whether political promises are implemented, how different news outlets frame the same political event, and how their elected representatives actually perform. This information exists in scattered, technical, or hard-to-navigate public sources (budget documents, legislative records, news archives, and financial disclosures), which makes it difficult for an ordinary citizen, journalist, or researcher to verify a political claim or compare performance without significant manual effort.
+Existing single-purpose tools (e.g., a standalone "fake news" or "fake promise" detector) attempt to label claims as simply true or false, which is difficult to establish objectively and is not academically defensible. CivicLens TN instead addresses the problem by combining budget data, historical scheme data, legislative-performance data, and news-framing analysis into one evidence-based system that produces feasibility and framing assessments rather than binary judgments.
+3. Main Objectives
+
+Collect and structure Tamil Nadu department- and scheme-wise budget data across multiple years.
+
+Cluster and track schemes over time using NLP and unsupervised learning to surface spending trends.
+
+Extract structured claims (target group, benefit, amount, time period, sector) from political statements using NLP.
+
+Compare new promises and claims against historical schemes and actual budget data to generate a feasibility/evidence assessment.
+
+Analyze Tamil news articles covering the same event to measure sentiment, framing, and emphasis across sources.
+
+Build a configurable, weighted performance score for MLAs/MPs from attendance, questions, debates, bills, and constituency indicators.
+
+Apply anomaly detection to publicly available political-funding data to flag statistically unusual donation patterns.
+
+Present all outputs through a unified citizen dashboard with explainable, evidence-linked results.
+4. Dataset
+The project uses real, publicly available data rather than synthetic datasets:
+
+Tamil Nadu Budget Portal — department-wise demands, scheme-level allocations and expenditure, by year.
+
+PRS Legislative Research — MLA/MP attendance, questions asked, debate participation, and bill activity.
+
+ADR / MyNeta — candidate financial disclosures and political-party donation/funding data.
+
+Tamil news archives — articles from multiple Tamil-language outlets covering the same political events, collected for framing/sentiment comparison.
+
+Political manifestos and past scheme documents — used to match new promises against historical precedents.
+Where domain-specific labeled data (e.g., claim-implementation status, framing labels) is not publicly available, a smaller annotated subset will be created manually for model training and evaluation.
+5. Proposed System Workflow
+Government Data / News / Legislative Records / Funding Data
+↓
+Data Collection & Preprocessing
+↓
+NLP Extraction  (claims, schemes, sentiment, entities)
+↓
+Module Processing
+(Budget Analyzer · Promise Analyzer · News Framing · Funding Anomaly · Rep. Score)
+↓
+Evidence Aggregation & Explainable Assessment
+↓
+Citizen Dashboard
+6. Modules & Features
+
+Module
+Core Function
+Budget & Scheme Analyzer
+Tracks department/scheme allocation over time; clusters related schemes; surfaces spending trends.
+Political Promise & Feasibility Analyzer
+Extracts claim structure, matches against historical promises, estimates cost, compares against budget.
+Tamil News Framing Analyzer
+Compares sentiment, word choice, and emphasis across outlets covering the same event.
+Representative Performance Dashboard
+Computes a configurable, weighted performance score from attendance, questions, debates, bills.
+Political Funding Transparency
+Visualizes party/donor funding and flags statistically unusual donation patterns.
+Claim Verification Engine
+Links a political claim to budget evidence and historical data for an evidence-based assessment.
+7. Machine-Learning Algorithms
+
+Category
+Algorithm(s)
+Applied To
+Supervised Learning
+Logistic Regression, Random Forest, XGBoost, SVM
+Claim/promise implementation-status classification (Implemented / Partially / Not / Unclear).
+Unsupervised Learning
+K-Means, DBSCAN, Topic Modeling, PCA
+Scheme clustering and news-topic/framing discovery.
+Anomaly Detection
+Isolation Forest
+Flagging statistically unusual political-donation patterns.
+Deep Learning / NLP
+IndicBERT / multilingual BERT, Sentence-BERT embeddings
+Tamil sentiment analysis, semantic similarity for promise matching, claim/entity extraction.
+Recommendation (optional, Phase 3)
+Multi-Armed Bandit / Q-Learning
+Personalizing which civic information is surfaced to a returning user.
+8. Advanced Component: Claim Verification Engine
+The central, integrating feature of the project is claim verification. A user submits a political statement (e.g., "We have dramatically increased education spending"). NLP extraction identifies the sector and quantitative claim, the system retrieves matching budget records and historical scheme data, and compares the claimed figure against actual multi-year spending change. The output is an evidence-based assessment (e.g., "Assessment: Mostly supported — Budget data: +21.4% vs. claimed +25%") together with the specific source documents and a note on similar historical claims, rather than a binary true/false label.
+9. Personalized Representative Scoring
+Rather than presenting a single, fixed performance score for each MLA/MP, the dashboard allows a citizen to re-weight the underlying indicators (attendance, questions, debates, bills, constituency work) according to what they personally value. The score is recalculated live from the same underlying PRS-derived data, avoiding the impression that there is one objectively "correct" political score.
+10. Expected Output
+The dashboard will display, per module:
+
+Budget Explorer: year-wise scheme allocation, change over time, and auto-generated scheme clusters.
+
+Promise Analyzer: extracted claim structure, feasibility rating, estimated cost, and budget-alignment result.
+
+News Framing: side-by-side sentiment/framing comparison across sources for a selected event.
+
+Representative Profile: performance score (with adjustable weights), attendance, questions, debates, bills.
+
+Funding Transparency: party/donor funding visualization with flagged anomalous donations.
+
+Claim Verification: evidence-backed assessment with linked source documents for any submitted claim.
+11. Technology Stack
+Python • Scikit-learn • XGBoost • Transformers (IndicBERT / multilingual BERT) • Sentence-BERT • Pandas • NumPy • Isolation Forest (Scikit-learn) • spaCy / IndicNLP for Tamil preprocessing • Matplotlib/Seaborn or Plotly for visualization • Streamlit or Flask for the citizen dashboard.
+12. Evaluation
+Claim-classification and news-framing models will be evaluated using Accuracy, Precision, Recall, F1-score, and Confusion Matrices on a held-out annotated set. Clustering quality will be assessed using Silhouette Score. Anomaly-detection results will be reviewed qualitatively against known outlier cases in the funding data, since ground-truth labels for "anomalous" donations are not available. All comparison results will be generated from experiments on the collected data rather than hard-coded.
+13. Expected Contribution
+
+Combines budget, legislative, media, and funding data into one connected accountability platform instead of five disconnected tools.
+
+Replaces binary "true/false" or "biased/unbiased" labeling with evidence-based, explainable assessments.
+
+Applies supervised learning, unsupervised learning, deep learning/NLP, and anomaly detection within a single, coherent system — covering the full ML-course requirement set.
+
+Demonstrates a real, low-resource Tamil NLP application (claim extraction, sentiment, semantic similarity).
+
+Uses entirely real public data (Tamil Nadu Budget Portal, PRS, ADR/MyNeta) rather than synthetic datasets.
+
+Produces a practical, citizen-facing dashboard with clear academic and civic-society relevance.
+14. Scope & Limitation
+This is an academic public-information and accountability platform, not a legal or definitive judgment on any individual, party, or news organization. Feasibility ratings, framing comparisons, and anomaly flags are statistical, project-level indicators and are not proof of wrongdoing, dishonesty, or bias. The initial implementation (Phase 1 MVP) covers the Budget Analyzer, Promise Analyzer, News Framing Analyzer, and Representative Dashboard; political-funding anomaly detection is a Phase 2 addition, and the reinforcement-learning-based personalization module is an optional Phase 3 extension, included only if required by the course.
+
