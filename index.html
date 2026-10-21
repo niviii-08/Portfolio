@@ -589,7 +589,7 @@ dlg.scrollTop=0;
 });
 dlg.onclick=e=>{if(e.target===dlg)dlg.close()};
 /* JOURNEY */
-$('#path').innerHTML=J.map(([y,t,ms])=>`<div class="yr"><b class="rv">${y}</b><p class="mono" style="color:var(--mute);margin:0 0 14px">${t}</p><div class="ms">${ms.map(m=>`<button class="m" aria-expanded="false">${h(m[0])}<small>${h(m[1])}</small></button>`).join('')}</div></div>`).join('')+`<div class="yr now"><b class="here">You are here</b><p class="mono" style="color:var(--mute)">Oct 2026. Shipping intelligent systems and learning in public.</p></div>`;
+$('#path').innerHTML=J.map(([y,t,ms])=>`<div class="yr"><b class="rv">${y}</b><p class="mono" style="color:var(--mute);margin:0 0 14px">${t}</p><div class="ms">${ms.map(m=>`<button class="m" aria-expanded="false">${h(m[0])}<small>${h(m[1])}</small></button>`).join('')}</div></div>`).join('')+`<div class="yr now"><b class="here">I'm here</b><p class="mono" style="color:var(--mute)">Currently working on building my skills</p></div>`;
 $$('.m').forEach(m=>m.onclick=()=>m.setAttribute('aria-expanded',m.getAttribute('aria-expanded')!=='true'));
 /* DOODLE & FLOWER CONTRIBUTION WALL */
 const DOODLE_IDEAS = [
