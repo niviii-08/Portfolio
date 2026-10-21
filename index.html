@@ -131,6 +131,10 @@ dialog::backdrop{background:#050a1ccc}dialog[open]{animation:pop .45s cubic-bezi
 .doodle-tool-btn{background:rgba(255,255,255,0.08);border:1px solid var(--line);color:#e6eeff;padding:4px 9px;font:500 11px var(--mono);cursor:pointer;transition:all .2s;border-radius:0}
 .doodle-tool-btn:hover,.doodle-tool-btn.on{background:var(--coral);color:#0a1740;border-color:var(--coral)}
 .doodle-form{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.doodle-tag-group{display:flex;flex-direction:column;gap:5px}
+.doodle-quick-tags{display:flex;gap:4px;flex-wrap:wrap}
+.quick-tag-btn{background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--mute);font:500 10px var(--mono);padding:2px 7px;cursor:pointer;border-radius:2px;transition:all .15s}
+.quick-tag-btn:hover{background:var(--coral);color:#0a1740;border-color:var(--coral)}
 .doodle-input{font:inherit;background:rgba(0,0,0,0.3);color:#e6eeff;border:1px solid var(--line);padding:10px 12px;width:100%;font-size:13px;border-radius:0}
 .doodle-input::placeholder{color:var(--mute)}
 .doodle-input:focus{outline:none;border-color:var(--coral)}
@@ -143,9 +147,9 @@ dialog::backdrop{background:#050a1ccc}dialog[open]{animation:pop .45s cubic-bezi
 .doodle-card.new-planted{animation:doodlePopIn .6s cubic-bezier(.17,.89,.32,1.28) forwards}
 @keyframes doodlePopIn{0%{opacity:0;transform:scale(.7) rotate(var(--r,0deg))}70%{transform:scale(1.06) rotate(var(--r,0deg))}100%{opacity:1;transform:scale(1) rotate(var(--r,0deg))}}
 .doodle-card .doodle-img{width:100%;aspect-ratio:1;object-fit:contain;background:#fbf8f2;border:1px solid rgba(0,0,0,0.06);display:block}
-.doodle-card .doodle-meta{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.doodle-card .doodle-meta{display:flex;justify-content:space-between;align-items:center;margin-top:2px;gap:6px}
 .doodle-card .doodle-author{font:600 14px var(--sans);color:#0a1740;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.doodle-card .doodle-badge{font:600 9px var(--mono);color:var(--wine);background:rgba(29,63,196,0.08);border:1px solid rgba(29,63,196,0.2);padding:2px 6px;text-transform:uppercase}
+.doodle-card .doodle-badge{font:600 9px var(--mono);color:var(--wine);background:rgba(29,63,196,0.08);border:1px solid rgba(29,63,196,0.2);padding:2px 6px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 .doodle-card .doodle-msg{font:italic 300 13px/1.4 var(--serif);color:#334155;margin:0;min-height:1.4em;word-break:break-word}
 .doodle-card .doodle-date{font:500 10px var(--mono);color:#94a3b8}
 .doodle-empty{grid-column:1/-1;border:2px dashed var(--line);padding:48px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(255,255,255,0.02)}
@@ -493,6 +497,26 @@ dialog{border:2px solid var(--ink);box-shadow:8px 8px 0 var(--wine)}
       <!-- Form Inputs -->
       <form class="doodle-form" id="doodleForm">
         <input class="doodle-input" id="doodleName" placeholder="Your name or nickname *" required maxlength="30" autocomplete="name">
+        <div class="doodle-tag-group">
+          <input class="doodle-input" id="doodleTag" placeholder="Your tag / role (e.g. Visitor, Friend, Recruiter)" maxlength="20" autocomplete="off" list="doodleTagList">
+          <datalist id="doodleTagList">
+            <option value="Visitor">
+            <option value="Friend">
+            <option value="Recruiter">
+            <option value="Developer">
+            <option value="Designer">
+            <option value="Student">
+            <option value="Peer">
+            <option value="Mentor">
+          </datalist>
+          <div class="doodle-quick-tags">
+            <button type="button" class="quick-tag-btn" data-tag="Visitor">Visitor</button>
+            <button type="button" class="quick-tag-btn" data-tag="Friend">Friend</button>
+            <button type="button" class="quick-tag-btn" data-tag="Recruiter">Recruiter</button>
+            <button type="button" class="quick-tag-btn" data-tag="Dev">Dev</button>
+            <button type="button" class="quick-tag-btn" data-tag="Peer">Peer</button>
+          </div>
+        </div>
         <input class="doodle-input" id="doodleNote" placeholder="A short sweet note (optional)" maxlength="80">
         <button class="btn f doodle-submit-btn" id="doodleSubmit" type="submit">
           <span>🌸 Plant on the wall</span>
@@ -1278,20 +1302,43 @@ function initSupabaseRealtime() {
 syncWallFromSupabase();
 initSupabaseRealtime();
 
+// Quick tag selector
+$$('.quick-tag-btn').forEach(b => {
+  b.onclick = () => {
+    const input = $('#doodleTag');
+    if (input) {
+      input.value = b.dataset.tag;
+      $$('.quick-tag-btn').forEach(btn => btn.classList.remove('active'));
+      b.classList.add('active');
+      input.focus();
+    }
+  };
+});
+const doodleTagEl = $('#doodleTag');
+if (doodleTagEl) {
+  doodleTagEl.oninput = () => {
+    const val = doodleTagEl.value.trim().toLowerCase();
+    $$('.quick-tag-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tag.toLowerCase() === val);
+    });
+  };
+}
+
 $('#doodleForm').onsubmit = async e => {
   e.preventDefault();
   const name = $('#doodleName').value.trim();
   if (!name) return;
+  const tag = (doodleTagEl && doodleTagEl.value.trim()) || 'Visitor';
   const note = $('#doodleNote').value.trim();
   const img = doodleCanvas.toDataURL('image/png');
   const tilts = ['-2deg', '1.8deg', '-1.2deg', '2.2deg', '-1.8deg'];
   const r = tilts[Math.floor(Math.random() * tilts.length)];
   const item = { 
     name, 
+    tag,
     note, 
     img, 
     stamp_type: currentStampType || 'custom', 
-    tag: 'Visitor', 
     rotation: r 
   };
 
@@ -1325,6 +1372,7 @@ $('#doodleForm').onsubmit = async e => {
   renderDoodles();
 
   $('#doodleForm').reset();
+  $$('.quick-tag-btn').forEach(btn => btn.classList.remove('active'));
   doodleCtx.fillStyle = '#fffdfa';
   doodleCtx.fillRect(0, 0, 240, 240);
   currentStampType = 'custom';
