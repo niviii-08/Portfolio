@@ -148,9 +148,6 @@ dialog::backdrop{background:#050a1ccc}dialog[open]{animation:pop .45s cubic-bezi
 .doodle-card .doodle-badge{font:600 9px var(--mono);color:var(--wine);background:rgba(29,63,196,0.08);border:1px solid rgba(29,63,196,0.2);padding:2px 6px;text-transform:uppercase}
 .doodle-card .doodle-msg{font:italic 300 13px/1.4 var(--serif);color:#334155;margin:0;min-height:1.4em;word-break:break-word}
 .doodle-card .doodle-date{font:500 10px var(--mono);color:#94a3b8}
-.doodle-del{position:absolute;top:6px;right:6px;width:24px;height:24px;border:1px solid #0d1b3d44;background:#fff;border-radius:50%;cursor:pointer;font-size:14px;display:none;align-items:center;justify-content:center;color:#0d1b3d;padding:0;line-height:1;transition:all .15s;z-index:5}
-.doodle-card:hover .doodle-del{display:flex}
-.doodle-del:hover{background:#ff4d6d;color:#fff;border-color:#ff4d6d}
 .doodle-empty{grid-column:1/-1;border:2px dashed var(--line);padding:48px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(255,255,255,0.02)}
 .doodle-empty-icon{font-size:40px;display:inline-block;animation:emptyFloat 3s ease-in-out infinite}
 @keyframes emptyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
@@ -283,7 +280,6 @@ dialog{border:2px solid var(--ink);box-shadow:8px 8px 0 var(--wine)}
   <div class="wall-header">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
       <span class="doodle-count-badge" id="doodleCountBadge" style="margin-bottom:0">🌸 0 planted · Be the first!</span>
-      <button class="doodle-tool-btn" id="doodleClearWall" type="button" style="display:none" title="Clear all planted flowers">↺ Clear all</button>
     </div>
     <h2 class="h2 rv">Contribution <i>wall</i></h2>
     <p class="sub rv">Leave your mark! Pick a cute flower or draw a doodle with your name to plant it in the garden.</p>
@@ -1196,7 +1192,6 @@ function renderDoodles() {
     return s;
   })];
   const badge = $('#doodleCountBadge');
-  const clearWallBtn = $('#doodleClearWall');
   if (all.length === 0) {
     board.innerHTML = `
       <div class="doodle-empty">
@@ -1205,7 +1200,6 @@ function renderDoodles() {
         <p>Pick a flower or sketch your doodle on the pad, then plant your mark right here.</p>
       </div>`;
     if (badge) badge.textContent = '🌸 0 planted · Be the first!';
-    if (clearWallBtn) clearWallBtn.style.display = 'none';
     return;
   }
   board.innerHTML = all.map((d, i) => {
@@ -1220,7 +1214,6 @@ function renderDoodles() {
     }
     return `
     <div class="doodle-card" style="--r:${d.rotation || d.r || (i % 2 ? '1.5deg' : '-1.5deg')}" data-c="VIEW">
-      <button class="doodle-del" type="button" data-idx="${i}" title="Remove this flower">×</button>
       <img class="doodle-img" src="${d.img}" alt="${h(d.name)}'s flower doodle" loading="lazy">
       <div class="doodle-meta">
         <span class="doodle-author">${h(d.name)}</span>
@@ -1232,26 +1225,6 @@ function renderDoodles() {
   `;
   }).join('');
   if (badge) badge.textContent = `🌸 ${all.length} flower${all.length === 1 ? '' : 's'} planted`;
-  if (clearWallBtn) clearWallBtn.style.display = 'inline-flex';
-
-  $$('.doodle-del').forEach(btn => {
-    btn.onclick = async e => {
-      e.stopPropagation();
-      const idx = +btn.dataset.idx;
-      if (idx < savedDoodles.length) {
-        const removed = savedDoodles.splice(idx, 1)[0];
-        try { localStorage.setItem('nn-planted-flowers', JSON.stringify(savedDoodles)); } catch(x){}
-        renderDoodles();
-        if (sbClient && removed && removed.id && !String(removed.id).startsWith('temp_')) {
-          try {
-            await sbClient.from('wall_doodles').delete().eq('id', removed.id);
-          } catch(err) {
-            console.warn('Supabase delete error:', err);
-          }
-        }
-      }
-    };
-  });
 }
 
 renderDoodles();
@@ -1304,26 +1277,6 @@ function initSupabaseRealtime() {
 
 syncWallFromSupabase();
 initSupabaseRealtime();
-
-const clearWallBtn = $('#doodleClearWall');
-if (clearWallBtn) {
-  clearWallBtn.onclick = async () => {
-    if (!confirm('Are you sure you want to clear all planted flowers?')) return;
-    const toDeleteIds = savedDoodles.map(d => d.id).filter(id => id && !String(id).startsWith('temp_'));
-    savedDoodles = [];
-    try {
-      localStorage.removeItem('nn-planted-flowers');
-    } catch(x){}
-    renderDoodles();
-    if (sbClient && toDeleteIds.length > 0) {
-      try {
-        await sbClient.from('wall_doodles').delete().in('id', toDeleteIds);
-      } catch(err) {
-        console.warn('Supabase clear error:', err);
-      }
-    }
-  };
-}
 
 $('#doodleForm').onsubmit = async e => {
   e.preventDefault();
