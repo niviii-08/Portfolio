@@ -502,7 +502,8 @@ dialog{border:2px solid var(--ink);box-shadow:8px 8px 0 var(--wine)}
           <span>🌸 Plant on the wall</span>
         </button>
       </form>
-      <p class="mono" style="font-size:10.5px;color:var(--mute);text-align:center;margin:0">Thank you for your precious time for contributing 🌸</p>
+      <p class="mono" id="doodleNoteDefault" style="font-size:10px;color:var(--mute);text-align:center;margin:0">Live on Supabase Cloud · Visible to everyone 🌸</p>
+      <p class="mono" id="doodleSuccessMsg" style="display:none;font-size:11px;color:var(--wine);text-align:center;margin:0;font-weight:600">Thank you for your precious time for contributing 🌸</p>
     </div>
 
     <!-- Wall Board of Planted Flowers -->
@@ -1377,7 +1378,15 @@ $('#doodleForm').onsubmit = async e => {
   currentStampType = 'custom';
   btn.disabled = false;
   btn.innerHTML = '<span>🎉 Planted on the wall!</span>';
-  setTimeout(() => { btn.innerHTML = '<span>🌸 Plant on the wall</span>'; }, 2200);
+  const defNote = $('#doodleNoteDefault');
+  const successMsg = $('#doodleSuccessMsg');
+  if (defNote) defNote.style.display = 'none';
+  if (successMsg) successMsg.style.display = 'block';
+  setTimeout(() => {
+    btn.innerHTML = '<span>🌸 Plant on the wall</span>';
+    if (successMsg) successMsg.style.display = 'none';
+    if (defNote) defNote.style.display = 'block';
+  }, 4500);
 };
 /* STAMPS */
 $('#stamps').innerHTML=STAMPS.map(s=>`<div class="st rv" style="--r:${s[2]}">${s[0]}<span class="mono">${s[1]}</span></div>`).join('');
